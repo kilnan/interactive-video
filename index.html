@@ -1,0 +1,137 @@
+
+<!DOCTYPE html> 
+<title>Video/Canvas Demo 2</title> 
+<script> 
+//implementare switching tra uno e l'altro
+//fare in modo che le sorgenti video non siano visibili, cosi rimane soltanto lo switching video
+//caricare due video diversi invece dello stesso
+//mettere i controlli fuori dal canvas
+//pausare i video e farli partire quando si switchano, invece di farli andare sempre
+//gestire N video caricati da js, invece di due video hardcodati
+//avere una funzione playVideo(video)
+//streaming audio?
+//potrei fare una demo prendendo due video in due versioni diverse, esempio
+	//video ufficiale canzone o clip fan
+//full screen
+var idVideoToPlay = 1;
+
+var v = document.getElementById('video1');
+	var v2 = null;
+	var canvas = null;
+	var context = null;
+	var back = null;
+	var backcontext = null;
+ 
+	var cw,ch;
+
+document.addEventListener('DOMContentLoaded', function(){
+	v = document.getElementById('video1');
+	v2 = document.getElementById('video2');
+	canvas = document.getElementById('c');
+	context = canvas.getContext('2d');
+	back = document.createElement('canvas');
+	backcontext = back.getContext('2d');
+ 
+	cw,ch;
+
+ 
+},false);
+
+function startDrawingVideo(videoId){
+		var v = document.getElementById(videoId);
+		cw = v.clientWidth;
+		ch = v.clientHeight;
+		canvas.width = 300;
+		canvas.height = 300;
+		back.width = 300;
+		back.height = 300;
+		draw(v,context,backcontext,300,300);
+}
+
+function draw(v,c,bc,w,h) {
+	if(v.paused || v.ended)	return false;
+	// First, draw it into the backing canvas
+	bc.drawImage(v,0,0,w,h);
+	// Grab the pixel data from the backing canvas
+	var idata = bc.getImageData(0,0,w,h);
+	var data = idata.data;
+	// Loop through the pixels, turning them grayscale
+	for(var i = 0; i < data.length; i+=4) {
+		var r = data[i];
+		var g = data[i+1];
+		var b = data[i+2];
+		var brightness = (3*r+4*g+b)>>>3;
+		data[i] = brightness;
+		data[i+1] = brightness;
+		data[i+2] = brightness;
+	}
+	idata.data = data;
+	// Draw the pixels onto the visible canvas
+	c.putImageData(idata,0,0);
+	// Start over!
+	setTimeout(draw,20,v,c,bc,w,h);
+}
+
+function startVideos(){
+	document.getElementById('video1').play();
+	setTimeout(function (){
+		document.getElementById('video2').play();
+		startDrawingVideo('video1');
+	}, 3000);
+}
+
+var currentVideo ='video1'
+
+function toggleVideo() {
+	if (currentVideo ==='video1') {
+		videoToStop = 'video1';
+		videoToPlay = 'video2';
+	}
+	else {
+		videoToStop = 'video2';
+		videoToPlay = 'video1';
+	}
+
+	var currentVideo = videoToPlay;
+
+	//the only way we know now to stop the recursion of function "draw" for the current video
+	document.getElementById(videoToStop).pause();
+	setTimeout(function (){
+		document.getElementById(videoToStop).play();
+	}, 3000);
+
+	document.getElementById(videoToPlay).play();
+	startDrawingVideo(videoToPlay);
+}
+
+</script> 
+ 
+
+ 
+<video id="video1"> 
+	<source src=video.webm type=video/webm> 
+	<source src=video.ogg type=video/ogg> 
+	<source src=video.mp4 type=video/mp4> 
+</video>
+
+<video id="video2"> 
+	<source src=video.webm type=video/webm> 
+	<source src=video.ogg type=video/ogg> 
+	<source src=video.mp4 type=video/mp4> 
+</video>
+
+<canvas id="c"></canvas> 
+ 
+<style> 
+#c {
+	
+}
+ 
+#v {
+	
+}
+
+#video1, #video2 {
+	width: 0px;
+}
+</style> 
