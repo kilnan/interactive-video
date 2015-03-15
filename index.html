@@ -104,6 +104,30 @@ function getAllVideoTags () {
 	return videoTags;
 }
 
+function videoLoaded(){
+	document.getElementById('loading').remove();
+}
+
+function checkVideoStatus() {
+		var videoElements = [];
+		for (var j = 0; j < videoIds.length; j++) {
+			videoElements.push(document.getElementById(videoIds[j].id));
+		}
+		
+		var videoReady = true;
+		for (var j = 0; j < videoElements.length; j++) {
+			if (videoElements[j].readyState !== 4 ){
+				videoReady = false;
+				break;
+			}
+		}
+		if (videoReady) {
+			videoLoaded();
+		}
+		else {
+			setTimeout(checkVideoStatus, 1000);
+		}
+	}
 
 function initialize() {
 	var hiddenVideos = document.getElementById('hiddenVideos');
@@ -119,9 +143,7 @@ function initialize() {
  
 	cw,ch;
 
-	//add video tags with mute tag
-	//initialize videos so that they're all buffered (by playing them or something)
-	// when all videos are init, we can start the whole thing
+	checkVideoStatus();
 }
 
 function draw(v,c,bc,w,h) {
@@ -185,6 +207,7 @@ function bindButtons() {
 <a id="startButton">Start Video</a>
 <a id="toggleButton">Toggle Video</a>
 <div id="hiddenVideos"></div>
+<div id="loading"> LOADING </div>
 
  
 <style> 
@@ -198,6 +221,14 @@ function bindButtons() {
 	cursor: pointer;
 }
 
+#loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
 </style>
 
 <script>
