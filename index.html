@@ -12,6 +12,10 @@
 	//video ufficiale canzone o clip fan
 //full screen
 // per runnare il server: lighttpd -f ./lighttpd.conf dalla dir del file. porta 3000
+
+//se far partire un video richiede troppo, 
+	//posso inizializzare tutti i video facendoli pre-partire per un secondo
+	//in aggiunta, o in alternativa, verifico il loro stato di buffering
 var idVideoToPlay = 1;
 
 var videoIds = ['video1', 'video2'];
@@ -106,10 +110,20 @@ function toggleVideo() {
 	changeVideoToDraw(videoToPlay);
 }
 
+function bindButtons() {
+	var toggleButton = document.getElementById('toggleButton');
+	var startButton = document.getElementById('startButton');
+
+	toggleButton.addEventListener('click', toggleVideo);
+	startButton.addEventListener('click', startVideos);
+}
+
 </script> 
  
+<body>
+<a id="startButton">Start Video</a>
+<a id="toggleButton">Toggle Video</a>
 
- 
 <video id="video1"> 
 	<source src=video.webm type=video/webm> 
 	<source src=video.ogg type=video/ogg> 
@@ -123,6 +137,8 @@ function toggleVideo() {
 </video>
 
 <canvas id="c"></canvas> 
+
+
  
 <style> 
 #c {
@@ -135,5 +151,12 @@ function toggleVideo() {
 
 #video1, #video2 {
 	width: 0px;
+	display: block;
 }
-</style> 
+</style>
+
+<script>
+bindButtons();
+</script>
+</body>
+</html>
