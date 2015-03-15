@@ -65,6 +65,12 @@ function startDrawingVideo(v){
 
 var switchToVideo = null;
 
+function initialize() {
+	//add video tags with mure tag
+	//initialize videos so that they're all buffered (by playing them or something)
+	// when all videos are init, we can start the whole thing
+}
+
 function draw(v,c,bc,w,h) {
 	if (switchToVideo) {
 		v = switchToVideo;
@@ -157,6 +163,7 @@ function bindButtons() {
 </style>
 
 <script>
+initialize();
 bindButtons();
 </script>
 </body>
