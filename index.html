@@ -7,7 +7,6 @@
 
 //gestire N video caricati da js, invece di due video hardcodati
 //avere una funzione playVideo(idVideo)
-//escludere audio dalla riproduzione del video
 //streaming audio?
 //potrei fare una demo prendendo due video in due versioni diverse, esempio
 	//video ufficiale canzone o clip fan
@@ -89,7 +88,7 @@ function getVideoTagHtml(videoToAdd) {
 		sourceTags = sourceTags + 
 		'<source src="'+ videoSources.src +'" type="' + videoSources.type + '" </source>'
 	}
-	var html = '<video id="' + id +'">' + sourceTags + '</video>';
+	var html = '<video muted="true" id="' + id +'">' + sourceTags + '</video>';
 
 	return html;
 }
