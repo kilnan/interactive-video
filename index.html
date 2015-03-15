@@ -1,21 +1,32 @@
 
 <!DOCTYPE html> 
 <title>Video/Canvas Demo 2</title> 
-<script> 
-//caricare due video diversi invece dello stesso
-//mettere i controlli fuori dal canvas
-//pausare i video e farli partire quando si switchano, invece di farli andare sempre
+<script>
+///TODO////
+//caricare due video diversi invece dello stesso2
+
 //gestire N video caricati da js, invece di due video hardcodati
-//avere una funzione playVideo(video)
+//avere una funzione playVideo(idVideo)
+//escludere audio dalla riproduzione del video
 //streaming audio?
 //potrei fare una demo prendendo due video in due versioni diverse, esempio
 	//video ufficiale canzone o clip fan
 //full screen
-// per runnare il server: lighttpd -f ./lighttpd.conf dalla dir del file. porta 3000
 
+/////NOTE/////
 //se far partire un video richiede troppo, 
 	//posso inizializzare tutti i video facendoli pre-partire per un secondo
 	//in aggiunta, o in alternativa, verifico il loro stato di buffering
+
+//gestione del flusso, possibilita:
+	//video partono in contemporanea e si switcha
+	//video parte quando schiaccio un pulsante
+	//video parte, di default, al termine di quello prima
+	//considerare integrazione con pulsanti in canvas
+//  penso che questa debba essere deciso con condice ad hoc, a meno di fare un bel lavoraccio...
+
+// per runnare il server: lighttpd -f ./lighttpd.conf dalla dir del file. porta 3000
+
 var idVideoToPlay = 1;
 
 var videoIds = ['video1', 'video2'];
