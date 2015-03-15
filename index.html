@@ -110,6 +110,26 @@ function videoLoaded(){
 	document.getElementById('loading').remove();
 }
 
+function doEmpiricPreloading(){
+	var videoElements = [];
+
+	for (var j = 0; j < videoIds.length; j++) {
+		videoElements.push(document.getElementById(videoIds[j].id));
+	}
+
+	for (var j = 0; j < videoElements.length; j++) {
+		videoElements[j].play();
+	}
+
+	setTimeout(function (){
+		for (var j = 0; j < videoElements.length; j++) {
+			videoElements[j].pause();
+			videoElements[j].currentTime = 0;
+		}
+		videoLoaded();
+	}, 5000);
+}
+
 function checkVideoStatus() {
 		var videoElements = [];
 		for (var j = 0; j < videoIds.length; j++) {
@@ -145,7 +165,7 @@ function initialize() {
  
 	cw,ch;
 
-	checkVideoStatus();
+	doEmpiricPreloading();
 }
 
 function draw(v,c,bc,w,h) {
