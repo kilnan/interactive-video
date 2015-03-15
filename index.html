@@ -2,8 +2,6 @@
 <!DOCTYPE html> 
 <title>Video/Canvas Demo 2</title> 
 <script> 
-//implementare switching tra uno e l'altro
-//fare in modo che le sorgenti video non siano visibili, cosi rimane soltanto lo switching video
 //caricare due video diversi invece dello stesso
 //mettere i controlli fuori dal canvas
 //pausare i video e farli partire quando si switchano, invece di farli andare sempre
@@ -15,6 +13,8 @@
 //full screen
 // per runnare il server: lighttpd -f ./lighttpd.conf dalla dir del file. porta 3000
 var idVideoToPlay = 1;
+
+var videoIds = ['video1', 'video2'];
 
 var v = document.getElementById('video1');
 	var v2 = null;
@@ -38,8 +38,7 @@ document.addEventListener('DOMContentLoaded', function(){
  
 },false);
 
-function startDrawingVideo(videoId){
-		var v = document.getElementById(videoId);
+function startDrawingVideo(v){
 		cw = v.clientWidth;
 		ch = v.clientHeight;
 		canvas.width = 300;
@@ -49,13 +48,23 @@ function startDrawingVideo(videoId){
 		draw(v,context,backcontext,300,300);
 }
 
+var switchToVideo = null;
+
 function draw(v,c,bc,w,h) {
-	if(v.paused || v.ended)	return false;
+	if (switchToVideo) {
+		v = switchToVideo;
+		switchVideo = null;
+	}
+
+	//if(v.paused || v.ended)	return false;
+
 	// First, draw it into the backing canvas
 	bc.drawImage(v,0,0,w,h);
+
 	// Grab the pixel data from the backing canvas
 	var idata = bc.getImageData(0,0,w,h);
 	var data = idata.data;
+
 	// Loop through the pixels, turning them grayscale
 	for(var i = 0; i < data.length; i+=4) {
 		var r = data[i];
@@ -74,35 +83,27 @@ function draw(v,c,bc,w,h) {
 }
 
 function startVideos(){
-	document.getElementById('video1').play();
-	setTimeout(function (){
-		document.getElementById('video2').play();
-		startDrawingVideo('video1');
-	}, 3000);
+	currentVideoId = 0;
+	var videoToStartId = videoIds[currentVideoId];
+	var videoElement = document.getElementById(videoToStartId);
+	videoElement.play();
+	startDrawingVideo(videoElement);
 }
 
-var currentVideo ='video1'
+var currentVideoId = null;
+
+function changeVideoToDraw(video) {
+	switchToVideo = video;
+}
 
 function toggleVideo() {
-	if (currentVideo ==='video1') {
-		videoToStop = 'video1';
-		videoToPlay = 'video2';
-	}
-	else {
-		videoToStop = 'video2';
-		videoToPlay = 'video1';
-	}
+	currentVideoId = (currentVideoId + 1) % videoIds.length;
 
-	var currentVideo = videoToPlay;
+	var videoToPlay = document.getElementById(videoIds[currentVideoId]);
 
-	//the only way we know now to stop the recursion of function "draw" for the current video
-	document.getElementById(videoToStop).pause();
-	setTimeout(function (){
-		document.getElementById(videoToStop).play();
-	}, 3000);
+	videoToPlay.play();
 
-	document.getElementById(videoToPlay).play();
-	startDrawingVideo(videoToPlay);
+	changeVideoToDraw(videoToPlay);
 }
 
 </script> 
