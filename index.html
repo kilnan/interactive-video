@@ -40,19 +40,6 @@ var v = document.getElementById('video1');
  
 	var cw,ch;
 
-document.addEventListener('DOMContentLoaded', function(){
-	v = document.getElementById('video1');
-	v2 = document.getElementById('video2');
-	canvas = document.getElementById('c');
-	context = canvas.getContext('2d');
-	back = document.createElement('canvas');
-	backcontext = back.getContext('2d');
- 
-	cw,ch;
-
- 
-},false);
-
 function startDrawingVideo(v){
 		cw = v.clientWidth;
 		ch = v.clientHeight;
@@ -66,6 +53,36 @@ function startDrawingVideo(v){
 var switchToVideo = null;
 
 function initialize() {
+	var hiddenVideos = document.getElementById('hiddenVideos');
+
+	videoTags = '';
+
+	videoTags = videoTags + 
+	'<video id="video2">' +
+	'<source src=video.webm type=video/webm>' +
+	'<source src=video.ogg type=video/ogg>' +
+	'<source src=video.mp4 type=video/mp4>' +
+	'</video>';
+
+	videoTags = videoTags + 
+	'<video id="video1">' +
+	'<source src=video.webm type=video/webm>' +
+	'<source src=video.ogg type=video/ogg>' +
+	'<source src=video.mp4 type=video/mp4>' +
+	'</video>';
+
+	hiddenVideos.innerHTML = videoTags;
+
+	v = document.getElementById('video1');
+	v2 = document.getElementById('video2');
+	canvas = document.getElementById('c');
+	context = canvas.getContext('2d');
+	back = document.createElement('canvas');
+	backcontext = back.getContext('2d');
+ 
+	cw,ch;
+
+
 	//add video tags with mure tag
 	//initialize videos so that they're all buffered (by playing them or something)
 	// when all videos are init, we can start the whole thing
@@ -128,23 +145,10 @@ function bindButtons() {
 </script> 
  
 <body>
+<canvas id="c"></canvas> 
 <a id="startButton">Start Video</a>
 <a id="toggleButton">Toggle Video</a>
-
-<video id="video1"> 
-	<source src=video.webm type=video/webm> 
-	<source src=video.ogg type=video/ogg> 
-	<source src=video.mp4 type=video/mp4> 
-</video>
-
-<video id="video2"> 
-	<source src=video.webm type=video/webm> 
-	<source src=video.ogg type=video/ogg> 
-	<source src=video.mp4 type=video/mp4> 
-</video>
-
-<canvas id="c"></canvas> 
-
+<div id="hiddenVideos"></div>
 
  
 <style> 
@@ -156,10 +160,16 @@ function bindButtons() {
 	
 }
 
-#video1, #video2 {
+#video1, #video2, .hiddenVideo, #hiddenVideos > video{
 	width: 0px;
 	display: block;
 }
+
+#startButton, #toggleButton  {
+	display: block;
+	cursor: pointer;
+}
+
 </style>
 
 <script>
