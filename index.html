@@ -30,9 +30,31 @@
 var idVideoToPlay = 1;
 
 var videoIds = [{
-	id: 'video1'
+	id: 'video1',
+	sources: [{
+			type: 'video/webm',
+			src: 'video.webm'
+		}, {
+			type: 'video/mp4',
+			src: 'video.mp4'
+		}, {
+			type: 'video/ogg',
+			src: 'video.ogg'
+		}
+	]
 },{
-	id: 'video2'
+	id: 'video2',
+	sources: [{
+			type: 'video/webm',
+			src: 'video.webm'
+		}, {
+			type: 'video/mp4',
+			src: 'video.mp4'
+		}, {
+			type: 'video/ogg',
+			src: 'video.ogg'
+		}
+	]
 }];
 
 var v = document.getElementById('video1');
@@ -57,26 +79,36 @@ function startDrawingVideo(v){
 var switchToVideo = null;
 
 
-function getVideoTagHtml(id, videoSources) {
-	var sourceTags =
-	'<source src=video.webm type=video/webm>' +
-	'<source src=video.ogg type=video/ogg>' +
-	'<source src=video.mp4 type=video/mp4>';
+function getVideoTagHtml(videoToAdd) {
+	var id = videoToAdd.id;
+	var videoSources = videoToAdd.sources;
+	var sourceTags = '';
+
+	for (var i = 0; i < videoSources.length; i++) {
+		var videoSources = videoSources[i];
+		sourceTags = sourceTags + 
+		'<source src="'+ videoSources.src +'" type="' + videoSources.type + '" </source>'
+	}
 	var html = '<video id="' + id +'">' + sourceTags + '</video>';
 
 	return html;
 }
 
+function getAllVideoTags () {
+	var videoTags = '';
+
+	for (var j = 0; j < videoIds.length; j++) {
+		videoTags = videoTags + getVideoTagHtml(videoIds[j]);
+	}
+
+	return videoTags;
+}
+
+
 function initialize() {
 	var hiddenVideos = document.getElementById('hiddenVideos');
 
-	videoTags = '';
-
-	videoTags = videoTags + getVideoTagHtml('video1');
-
-	videoTags = videoTags + getVideoTagHtml('video2');
-
-	hiddenVideos.innerHTML = videoTags;
+	hiddenVideos.innerHTML = getAllVideoTags();
 
 	v = document.getElementById('video1');
 	v2 = document.getElementById('video2');
@@ -87,8 +119,7 @@ function initialize() {
  
 	cw,ch;
 
-
-	//add video tags with mure tag
+	//add video tags with mute tag
 	//initialize videos so that they're all buffered (by playing them or something)
 	// when all videos are init, we can start the whole thing
 }
